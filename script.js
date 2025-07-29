@@ -66,7 +66,7 @@ function animateTitle(card) {
 }
 document.getElementById("download-btn").addEventListener("click", function() {
     // Assuming your PDF file is named "resume.pdf"
-    var pdfFilePath = "RinkiCV.pdf";
+    var pdfFilePath = "Rinki.pdf";
     
     // Create an anchor element
     var link = document.createElement("a");
@@ -104,4 +104,53 @@ function showToast(message) {
 function toggleMenu() {
     var menuIcon = document.querySelector('.menu-icon');
     menuIcon.classList.toggle('open');
+}
+const scrollCursor = document.getElementById("scroll-cursor");
+let scrollTimeout = null;
+
+// Show cursor on mousemove
+window.addEventListener("mousemove", (e) => {
+  showScrollCursor(e.clientX, e.clientY);
+});
+
+// Show cursor on one-finger touch
+window.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 1) {
+    showScrollCursor(e.touches[0].clientX, e.touches[0].clientY);
+  } else {
+    hideCursor();
+  }
+});
+
+// Hide cursor during scroll (trackpad, wheel, keyboard, etc.)
+window.addEventListener("scroll", () => {
+  hideCursor();
+
+  // Optional: restore cursor after scroll ends
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    scrollCursor.style.opacity = 0;
+  }, 500);
+});
+
+// Optional: hide on gesture (Safari)
+window.addEventListener("gesturestart", () => {
+  hideCursor();
+});
+
+// Helper to show scroll cursor
+function showScrollCursor(x, y) {
+  scrollCursor.style.left = `${x}px`;
+  scrollCursor.style.top = `${y}px`;
+  scrollCursor.style.opacity = 1;
+
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    scrollCursor.style.opacity = 0;
+  }, 1000);
+}
+
+// Hide function
+function hideCursor() {
+  scrollCursor.style.opacity = 0;
 }
